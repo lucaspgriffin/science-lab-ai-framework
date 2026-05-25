@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab onboarding: science-lab-AI-framework</title>
+<style>
+  :root {
+    --bg: #faf7f1;
+    --panel: #fffdf8;
+    --ink: #2a2a2a;
+    --muted: #6e6a62;
+    --rule: #d9d2c2;
+    --accent: #2c5f7c;
+    --accent-hover: #1f4659;
+    --accent-soft: rgba(44, 95, 124, 0.08);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Charter', 'Iowan Old Style', 'Georgia', serif;
+    line-height: 1.55;
+    padding: 40px;
+  }
+  .wrap { max-width: 800px; margin: 0 auto; }
+  header { margin-bottom: 32px; }
+  h1 {
+    font-family: 'Helvetica Neue', 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px 0;
+  }
+  .subtitle { color: var(--muted); font-size: 15px; margin: 0; }
+  .intro {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-top: 24px;
+    font-size: 15px;
+  }
+  .intro p { margin: 0 0 8px 0; }
+  .intro p:last-child { margin-bottom: 0; }
+  .intro code {
+    font-family: 'Menlo', 'Monaco', monospace;
+    background: var(--accent-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+  h2 {
+    font-family: 'Helvetica Neue', 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin: 48px 0 4px 0;
+    color: var(--accent);
+  }
+  .section-hint {
+    color: var(--muted);
+    font-size: 13px;
+    font-style: italic;
+    margin: 0 0 18px 0;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 0 0 24px 0;
+  }
+  .q {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 14px 18px 16px;
+    margin-bottom: 14px;
+  }
+  .q-label {
+    font-size: 15px;
+    margin: 0 0 8px 0;
+    color: var(--ink);
+  }
+  .q-num {
+    color: var(--muted);
+    font-family: 'Helvetica Neue', 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-right: 6px;
+  }
+  .q-hint {
+    color: var(--muted);
+    font-size: 13px;
+    margin: -4px 0 8px 0;
+    font-style: italic;
+  }
+  textarea, input[type=text] {
+    width: 100%;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+    background: #fff;
+    color: var(--ink);
+    resize: vertical;
+  }
+  textarea { min-height: 70px; }
+  textarea.tall { min-height: 160px; }
+  textarea:focus, input[type=text]:focus, input[type=file]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(44, 95, 124, 0.15);
+  }
+  .opts { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+  .opts label {
+    font-size: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+  .opts input[type=radio], .opts input[type=checkbox] {
+    margin-top: 4px;
+    accent-color: var(--accent);
+  }
+  .followup {
+    margin-top: 10px;
+    padding-left: 16px;
+    border-left: 2px solid var(--rule);
+    display: none;
+  }
+  .followup.show { display: block; }
+  .followup .q { background: transparent; border: none; padding: 6px 0 0; margin-bottom: 6px; }
+  .file-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  input[type=file] {
+    font-family: inherit;
+    font-size: 14px;
+  }
+  .actions {
+    position: sticky;
+    bottom: 16px;
+    margin-top: 40px;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 14px 18px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: 'Helvetica Neue', 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+  }
+  button:hover { background: var(--accent-hover); }
+  button.secondary {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  button.secondary:hover { background: var(--accent-soft); }
+  .status { color: var(--muted); font-size: 13px; margin-left: auto; }
+  .export-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 26, 20, 0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  .export-modal.open { display: flex; }
+  .export-inner {
+    background: var(--panel);
+    border-radius: 8px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 85vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .export-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .export-header h3 { margin: 0; font-family: 'Helvetica Neue', 'Inter', sans-serif; font-size: 16px; }
+  .export-body {
+    padding: 16px 20px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .export-body p {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 0 12px 0;
+  }
+  .export-body textarea {
+    min-height: 55vh;
+    font-family: 'Menlo', 'Monaco', monospace;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .export-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .progress {
+    font-family: 'Helvetica Neue', 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    letter-spacing: 0.02em;
+  }
+  details summary {
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Lab onboarding</h1>
+    <p class="subtitle">Configuring <code style="font-family:'Menlo','Monaco',monospace;font-size:14px;background:var(--accent-soft);padding:1px 5px;border-radius:3px;">science-lab-AI-framework</code> for your lab.</p>
+
+    <div class="intro">
+      <p>This form gathers what the framework needs to populate your lab's <code>conventions/</code>, scaffold domain-specialist agents under <code>agents/</code>, and seed your first three knowledge-base topics. Seven phases. Answer as much or as little as you want; you can come back later.</p>
+      <p>Answers are stored in this browser tab only (localStorage). When you finish, use <strong>Export to text</strong> at the bottom to generate a block you can paste into a chat session running the <code>lab-onboarding</code> skill, or <strong>Download .txt</strong> to save it as a file.</p>
+      <p>The minimum viable batch is Phases 1, 2, and 4. The rest can be filled in over time.</p>
+      <p class="progress" id="progress">0 / 0 answered</p>
+    </div>
+  </header>
+
+  <!-- ============ Phase 1 ============ -->
+  <h2>1. Lab identity</h2>
+  <p class="section-hint">Who you are. Drives header blocks and frontmatter across generated files.</p>
+  <hr>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">1.1</span>Lab name (short form, used in headers).</p>
+    <input type="text" data-id="1.1" placeholder="e.g. Forest Small-Mammal Lab">
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">1.2</span>Principal investigator name and institution.</p>
+    <input type="text" data-id="1.2" placeholder="e.g. Dr. Y, University of Z">
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">1.3</span>Research domain.</p>
+    <input type="text" data-id="1.3" placeholder="e.g. terrestrial ecology">
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">1.4</span>Subfield emphasis (1 to 2 sentences).</p>
+    <textarea data-id="1.4" placeholder="e.g. Small-mammal population dynamics and vegetation-climate interactions in temperate-forest systems, with a focus on canopy structure and community composition."></textarea>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">1.5</span>Methods stack (comma-separated).</p>
+    <textarea data-id="1.5" placeholder="e.g. camera traps, live-trapping with mark-recapture, vegetation transects, occupancy modelling"></textarea>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">1.6</span>Primary outputs.</p>
+    <div class="opts">
+      <label><input type="checkbox" data-id="1.6" value="primary research manuscripts"> Primary research manuscripts</label>
+      <label><input type="checkbox" data-id="1.6" value="open-source software"> Open-source software (R/Python packages)</label>
+      <label><input type="checkbox" data-id="1.6" value="published datasets"> Published datasets</label>
+      <label><input type="checkbox" data-id="1.6" value="analysis reports"> Analysis reports (internal or commissioned)</label>
+      <label><input type="checkbox" data-id="1.6" value="review and perspective pieces"> Review and perspective pieces</label>
+      <label><input type="checkbox" data-id="1.6" value="grant proposals"> Grant proposals</label>
+    </div>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">1.7</span>Target journals (top three to five).</p>
+    <textarea data-id="1.7" placeholder="e.g. Journal of Animal Ecology, Ecography, Methods in Ecology and Evolution, Functional Ecology"></textarea>
+  </div>
+
+  <!-- ============ Phase 2 ============ -->
+  <h2>2. Voice elicitation</h2>
+  <p class="section-hint">The highest-leverage section. Two parts: paste samples (Part A), then set explicit preferences (Part B).</p>
+  <hr>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">2.1</span><strong>Part A.</strong> Paste 2 to 3 sample paragraphs from your lab's recent published papers (intro, discussion, or abstract). These are the primary signal for voice inference.</p>
+    <p class="q-hint">More material is better. Mix paragraph types (intro + discussion) if you can.</p>
+    <textarea class="tall" data-id="2.1" placeholder="Paste paragraphs here. Separate papers with a blank line."></textarea>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">2.2</span>Or upload a file with sample paragraphs (.txt or .md).</p>
+    <p class="q-hint">Contents will be read into the field above. Stays in this tab; nothing is uploaded anywhere.</p>
+    <div class="file-row">
+      <input type="file" data-fileinput="2.1" accept=".txt,.md,text/plain,text/markdown">
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">2.3</span><strong>Part B.</strong> Default register.</p>
+    <div class="opts">
+      <label><input type="radio" name="2.3" data-id="2.3" value="technical, methods-heavy, citation-dense"> Technical, methods-heavy, citation-dense (e.g. *Nature*-family primary research)</label>
+      <label><input type="radio" name="2.3" data-id="2.3" value="technical but accessible to a broader scientific reader"> Technical but accessible to a broader scientific reader</label>
+      <label><input type="radio" name="2.3" data-id="2.3" value="formal academic with limited jargon"> Formal academic with limited jargon (e.g. policy briefs, perspectives)</label>
+      <label><input type="radio" name="2.3" data-id="2.3" value="informal and direct"> Informal and direct (e.g. blog, public-facing)</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">2.4</span>Hedging stance for mechanistic interpretations.</p>
+    <div class="opts">
+      <label><input type="radio" name="2.4" data-id="2.4" value="aggressive: 'we show', 'we demonstrate'"> Aggressive: "we show", "we demonstrate"</label>
+      <label><input type="radio" name="2.4" data-id="2.4" value="moderate: 'consistent with', 'suggests'"> Moderate: "consistent with", "suggests"</label>
+      <label><input type="radio" name="2.4" data-id="2.4" value="conservative: 'may indicate', 'one plausible interpretation'"> Conservative: "may indicate", "one plausible interpretation"</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">2.5</span>Em-dash policy.</p>
+    <p class="q-hint">The framework recommends a hard ban: em-dashes are an LLM tell, and banning them breaks cadence drift. You can override.</p>
+    <div class="opts">
+      <label><input type="radio" name="2.5" data-id="2.5" value="hard ban (framework default)" checked> Hard ban (framework default)</label>
+      <label><input type="radio" name="2.5" data-id="2.5" value="allowed but capped at one per page"> Allowed, capped at one per page</label>
+      <label><input type="radio" name="2.5" data-id="2.5" value="allowed without restriction"> Allowed without restriction</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">2.6</span>Banned words and phrases. List the LLM-default tells your lab finds grating.</p>
+    <p class="q-hint">e.g. "groundbreaking", "novel" (overused), "significantly" without a number, "demonstrates" for correlational findings.</p>
+    <textarea data-id="2.6" placeholder="One per line, or comma-separated."></textarea>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">2.7</span>Signature phrases your lab uses repeatedly. Pull from your recent papers.</p>
+    <p class="q-hint">e.g. "We reasoned that ...", "Consistent with ...", "These observations suggest ..."</p>
+    <textarea data-id="2.7" placeholder="One per line."></textarea>
+  </div>
+
+  <!-- ============ Phase 3 ============ -->
+  <h2>3. Manuscript norms</h2>
+  <p class="section-hint">How your lab structures and formats primary research papers.</p>
+  <hr>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">3.1</span>Citation style.</p>
+    <div class="opts">
+      <label><input type="radio" name="3.1" data-id="3.1" value="numeric (Vancouver / Nature style)"> Numeric (Vancouver / Nature style)</label>
+      <label><input type="radio" name="3.1" data-id="3.1" value="author-year (Harvard / APA style)"> Author-year (Harvard / APA style)</label>
+      <label><input type="radio" name="3.1" data-id="3.1" value="journal-specific (varies)"> Journal-specific (varies)</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">3.2</span>Reference manager.</p>
+    <div class="opts">
+      <label><input type="radio" name="3.2" data-id="3.2" value="Zotero"> Zotero</label>
+      <label><input type="radio" name="3.2" data-id="3.2" value="EndNote"> EndNote</label>
+      <label><input type="radio" name="3.2" data-id="3.2" value="Paperpile"> Paperpile</label>
+      <label><input type="radio" name="3.2" data-id="3.2" value="Mendeley"> Mendeley</label>
+      <label><input type="radio" name="3.2" data-id="3.2" value="BibTeX directly"> BibTeX directly</label>
+      <label><input type="radio" name="3.2" data-id="3.2" value="none / manual"> None, manual</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">3.3</span>Methods-section convention.</p>
+    <div class="opts">
+      <label><input type="radio" name="3.3" data-id="3.3" value="terse main-text Methods, detail deferred to supplementary protocol"> Terse main-text Methods, detail deferred to supplementary protocol</label>
+      <label><input type="radio" name="3.3" data-id="3.3" value="full Methods in main text"> Full Methods in main text</label>
+      <label><input type="radio" name="3.3" data-id="3.3" value="Methods-after-Discussion (Nature style)"> Methods-after-Discussion (Nature style)</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">3.4</span>Figure caption length.</p>
+    <div class="opts">
+      <label><input type="radio" name="3.4" data-id="3.4" value="terse (one or two sentences per panel)"> Terse (one or two sentences per panel)</label>
+      <label><input type="radio" name="3.4" data-id="3.4" value="standard (full descriptive caption with stats)"> Standard (full descriptive caption with stats)</label>
+      <label><input type="radio" name="3.4" data-id="3.4" value="verbose (caption can substitute for reading the panel)"> Verbose (caption can substitute for reading the panel)</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">3.5</span>Abstract structure.</p>
+    <div class="opts">
+      <label><input type="radio" name="3.5" data-id="3.5" value="single paragraph, no headings"> Single paragraph, no headings</label>
+      <label><input type="radio" name="3.5" data-id="3.5" value="structured headings (Background, Methods, Results, Conclusions)"> Structured headings (Background, Methods, Results, Conclusions)</label>
+      <label><input type="radio" name="3.5" data-id="3.5" value="varies by journal"> Varies by journal</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">3.6</span>Journal-specific quirks the framework should know about.</p>
+    <p class="q-hint">e.g. Methods in Ecology and Evolution methods-paper conventions, BES journal preprint policies, journal-specific section orderings.</p>
+    <textarea data-id="3.6" placeholder="One per line."></textarea>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">3.7</span>Source-integrity stance: how strictly are cited claims policed?</p>
+    <div class="opts">
+      <label><input type="radio" name="3.7" data-id="3.7" value="strict: every cited claim traces to a verifiable source via Literature Extractor + Extraction Validator"> Strict: every cited claim must trace to a verifiable source via the Literature Extractor and Extraction Validator agents (framework default)</label>
+      <label><input type="radio" name="3.7" data-id="3.7" value="moderate: paraphrase allowed if the underlying source is named"> Moderate: paraphrase allowed if the underlying source is named</label>
+      <label><input type="radio" name="3.7" data-id="3.7" value="lenient: general claims permitted without per-claim provenance"> Lenient: general claims permitted without per-claim provenance</label>
+    </div>
+  </div>
+
+  <!-- ============ Phase 4 ============ -->
+  <h2>4. Code stack</h2>
+  <p class="section-hint">Drives conventions/code-format.md and conventions/figure-format.md.</p>
+  <hr>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">4.1</span>Primary language.</p>
+    <div class="opts">
+      <label><input type="radio" name="4.1" data-id="4.1" value="R" data-followup="followup-r"> R</label>
+      <label><input type="radio" name="4.1" data-id="4.1" value="Python" data-followup="followup-py"> Python</label>
+      <label><input type="radio" name="4.1" data-id="4.1" value="both R and Python" data-followup="followup-both"> Both R and Python</label>
+      <label><input type="radio" name="4.1" data-id="4.1" value="other"> Other (Julia, MATLAB, C++, etc.)</label>
+    </div>
+
+    <div class="followup" id="followup-r">
+      <div class="q">
+        <p class="q-label">R dialect preference.</p>
+        <div class="opts">
+          <label><input type="radio" name="4.1r" data-id="4.1r" value="tidyverse"> tidyverse</label>
+          <label><input type="radio" name="4.1r" data-id="4.1r" value="base R"> base R</label>
+          <label><input type="radio" name="4.1r" data-id="4.1r" value="data.table"> data.table</label>
+          <label><input type="radio" name="4.1r" data-id="4.1r" value="mixed (tidyverse + data.table where speed matters)"> Mixed (tidyverse + data.table where speed matters)</label>
+        </div>
+      </div>
+      <div class="q">
+        <p class="q-label">R plotting library.</p>
+        <div class="opts">
+          <label><input type="radio" name="4.1rp" data-id="4.1rp" value="ggplot2 with custom theme"> ggplot2 with a custom theme</label>
+          <label><input type="radio" name="4.1rp" data-id="4.1rp" value="ggplot2 defaults"> ggplot2 defaults</label>
+          <label><input type="radio" name="4.1rp" data-id="4.1rp" value="base graphics"> base graphics</label>
+          <label><input type="radio" name="4.1rp" data-id="4.1rp" value="lattice"> lattice</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="followup" id="followup-py">
+      <div class="q">
+        <p class="q-label">Python scientific stack.</p>
+        <div class="opts">
+          <label><input type="radio" name="4.1p" data-id="4.1p" value="numpy + pandas + scipy"> numpy + pandas + scipy</label>
+          <label><input type="radio" name="4.1p" data-id="4.1p" value="polars"> polars</label>
+          <label><input type="radio" name="4.1p" data-id="4.1p" value="jax / pytorch (ML-heavy)"> jax / pytorch (ML-heavy)</label>
+          <label><input type="radio" name="4.1p" data-id="4.1p" value="mixed"> Mixed</label>
+        </div>
+      </div>
+      <div class="q">
+        <p class="q-label">Python plotting library.</p>
+        <div class="opts">
+          <label><input type="radio" name="4.1pp" data-id="4.1pp" value="matplotlib"> matplotlib</label>
+          <label><input type="radio" name="4.1pp" data-id="4.1pp" value="seaborn"> seaborn</label>
+          <label><input type="radio" name="4.1pp" data-id="4.1pp" value="plotnine"> plotnine</label>
+          <label><input type="radio" name="4.1pp" data-id="4.1pp" value="plotly"> plotly</label>
+          <label><input type="radio" name="4.1pp" data-id="4.1pp" value="altair"> altair</label>
+        </div>
+      </div>
+      <div class="q">
+        <p class="q-label">Python environment management.</p>
+        <div class="opts">
+          <label><input type="radio" name="4.1pe" data-id="4.1pe" value="uv"> uv</label>
+          <label><input type="radio" name="4.1pe" data-id="4.1pe" value="poetry"> poetry</label>
+          <label><input type="radio" name="4.1pe" data-id="4.1pe" value="conda / mamba"> conda / mamba</label>
+          <label><input type="radio" name="4.1pe" data-id="4.1pe" value="pip + venv"> pip + venv</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="followup" id="followup-both">
+      <div class="q">
+        <p class="q-label">Which language is dominant for analysis vs scripting?</p>
+        <textarea data-id="4.1b" placeholder="e.g. 'Analysis in R (tidyverse + ggplot2), scripting and ML in Python (numpy + jax).'"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">4.2</span>Project layout convention.</p>
+    <p class="q-hint">e.g. "data/raw, data/processed, R/, scripts/, outputs/figures, outputs/tables". Or paste a tree.</p>
+    <textarea data-id="4.2" placeholder="Describe or paste the directory layout."></textarea>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">4.3</span>Naming style.</p>
+    <div class="opts">
+      <label><input type="radio" name="4.3" data-id="4.3" value="snake_case"> snake_case</label>
+      <label><input type="radio" name="4.3" data-id="4.3" value="camelCase"> camelCase</label>
+      <label><input type="radio" name="4.3" data-id="4.3" value="mixed (snake_case for variables, camelCase for functions)"> Mixed (snake_case for variables, camelCase for functions)</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">4.4</span>Version-control practice.</p>
+    <div class="opts">
+      <label><input type="checkbox" data-id="4.4" value="git locally"> git locally</label>
+      <label><input type="checkbox" data-id="4.4" value="GitHub (public)"> GitHub (public repos)</label>
+      <label><input type="checkbox" data-id="4.4" value="GitHub (private)"> GitHub (private repos)</label>
+      <label><input type="checkbox" data-id="4.4" value="GitHub Actions for CI"> GitHub Actions for CI</label>
+      <label><input type="checkbox" data-id="4.4" value="Zenodo deposits per release"> Zenodo deposits per release</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">4.5</span>Reproducibility expectations.</p>
+    <div class="opts">
+      <label><input type="radio" name="4.5" data-id="4.5" value="containerised (Docker / Apptainer)"> Containerised (Docker / Apptainer)</label>
+      <label><input type="radio" name="4.5" data-id="4.5" value="lockfile (renv, uv.lock, conda env file)"> Lockfile (renv, uv.lock, conda env file)</label>
+      <label><input type="radio" name="4.5" data-id="4.5" value="README-only with version constraints"> README-only with version constraints</label>
+      <label><input type="radio" name="4.5" data-id="4.5" value="none / informal"> None / informal</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">4.6</span>Optional: paste a representative analysis script (or describe one). The skill will infer code conventions from it.</p>
+    <textarea class="tall" data-id="4.6" placeholder="Paste a 200 to 600 line analysis script, or skip."></textarea>
+  </div>
+
+  <!-- ============ Phase 5 ============ -->
+  <h2>5. Agent roster</h2>
+  <p class="section-hint">The framework ships with five general agents (Lab Director, Quantitative Scientist, Science Writer, Literature Extractor, Extraction Validator). Phase 5 adds domain specialists.</p>
+  <hr>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">5.1</span>Which domain specialists does your lab need? Two to four is typical.</p>
+    <p class="q-hint">Examples: "camera-trap wildlife specialist", "small-mammal population ecologist", "vegetation ecologist", "movement ecologist", "physical oceanographer", "behavioural neuroscientist".</p>
+    <textarea data-id="5.1" placeholder="One per line. Use kebab-case for file names (e.g. 'camera-trap-wildlife-specialist')."></textarea>
+  </div>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">5.2</span>For each specialist named above, list 2 to 3 core sub-topics and 2 to 3 signature methods.</p>
+    <p class="q-hint">Group by specialist. Example: "camera-trap-wildlife-specialist: deployment design, detection probability, species ID / methods: unmarked, ubms, secr".</p>
+    <textarea class="tall" data-id="5.2" placeholder="One specialist block per line, with sub-topics and methods."></textarea>
+  </div>
+
+  <!-- ============ Phase 6 ============ -->
+  <h2>6. Knowledge-base seed</h2>
+  <p class="section-hint">Three topics to populate first. Pick high-traffic concepts your lab will return to often.</p>
+  <hr>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">6.1</span>Topic 1: name (kebab-case), one-line scope, two or three placeholder article titles.</p>
+    <textarea data-id="6.1" placeholder="Name: camera-trap-methods&#10;Scope: deployment design, detection probability, species ID&#10;Articles: detection-probability, deployment-design, species-id-confidence"></textarea>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">6.2</span>Topic 2: same format.</p>
+    <textarea data-id="6.2" placeholder="Name: ...&#10;Scope: ...&#10;Articles: ..."></textarea>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">6.3</span>Topic 3: same format.</p>
+    <textarea data-id="6.3" placeholder="Name: ...&#10;Scope: ...&#10;Articles: ..."></textarea>
+  </div>
+
+  <!-- ============ Phase 7 ============ -->
+  <h2>7. Quality preferences</h2>
+  <p class="section-hint">Which research-iterate gates apply to your work, and what to rename them.</p>
+  <hr>
+
+  <div class="q">
+    <p class="q-label"><span class="q-num">7.1</span>The Analytic gate (residual diagnostics, posterior predictive checks, etc.) is always on. Any lab-specific threshold rules?</p>
+    <textarea data-id="7.1" placeholder="e.g. 'Posterior predictive checks must pass for every fitted model before downstream interpretation.'"></textarea>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">7.2</span>The "Domain" gate. What does your lab call it, and what are its criteria?</p>
+    <p class="q-hint">e.g. "Ecological gate" for terrestrial ecology, "Oceanographic gate" for physical oceanography, "Ethological gate" for behavioural neuroscience.</p>
+    <textarea data-id="7.2" placeholder="Gate name and 2 to 4 criteria."></textarea>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">7.3</span>Visual gate (render-and-read protocol on every figure). Apply?</p>
+    <div class="opts">
+      <label><input type="radio" name="7.3" data-id="7.3" value="yes (framework default)" checked> Yes (framework default)</label>
+      <label><input type="radio" name="7.3" data-id="7.3" value="yes with lab-specific figure standards"> Yes, with lab-specific figure standards (specify in 7.5)</label>
+      <label><input type="radio" name="7.3" data-id="7.3" value="no"> No</label>
+    </div>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">7.4</span>Literature gate (require contextualisation against existing literature before publication-ready). Apply?</p>
+    <div class="opts">
+      <label><input type="radio" name="7.4" data-id="7.4" value="yes, enforced for every analysis"> Yes, enforced for every analysis</label>
+      <label><input type="radio" name="7.4" data-id="7.4" value="yes, but only at the manuscript phase"> Yes, but only at the manuscript phase</label>
+      <label><input type="radio" name="7.4" data-id="7.4" value="no"> No</label>
+    </div>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">7.5</span>Framing gate (advocacy vs descriptive scoping). Apply?</p>
+    <div class="opts">
+      <label><input type="radio" name="7.5" data-id="7.5" value="yes (framework default)"> Yes (framework default)</label>
+      <label><input type="radio" name="7.5" data-id="7.5" value="no"> No</label>
+    </div>
+  </div>
+  <div class="q">
+    <p class="q-label"><span class="q-num">7.6</span>Anything else about quality standards the framework should know.</p>
+    <textarea data-id="7.6" placeholder="Optional."></textarea>
+  </div>
+
+  <div class="actions">
+    <button onclick="exportAnswers()">Export to text</button>
+    <button class="secondary" onclick="downloadDirect()">Download .txt</button>
+    <button class="secondary" onclick="clearDraft()">Clear all</button>
+    <span class="status" id="status"></span>
+  </div>
+
+</div>
+
+<!-- Export modal -->
+<div class="export-modal" id="exportModal">
+  <div class="export-inner">
+    <div class="export-header">
+      <h3>Your answers: paste into a chat running the lab-onboarding skill</h3>
+      <button class="secondary" onclick="closeModal()" style="padding: 4px 12px;">Close</button>
+    </div>
+    <div class="export-body">
+      <p>Copy the block below and paste it into a chat session with a model that has access to <code>science-lab-AI-framework</code>. The header tells the model to invoke the <code>lab-onboarding</code> skill.</p>
+      <textarea id="exportText" readonly></textarea>
+    </div>
+    <div class="export-footer">
+      <button class="secondary" onclick="downloadText()">Download .txt</button>
+      <button onclick="copyText()">Copy to clipboard</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'science-lab-AI-framework-onboarding-v1';
+
+const PHASES = {
+  "1. Lab identity": [
+    ["1.1", "Lab name"],
+    ["1.2", "Principal investigator"],
+    ["1.3", "Research domain"],
+    ["1.4", "Subfield emphasis"],
+    ["1.5", "Methods stack"],
+    ["1.6", "Primary outputs"],
+    ["1.7", "Target journals"]
+  ],
+  "2. Voice elicitation": [
+    ["2.1", "Sample paragraphs (Part A)"],
+    ["2.3", "Default register"],
+    ["2.4", "Hedging stance for mechanistic interpretations"],
+    ["2.5", "Em-dash policy"],
+    ["2.6", "Banned words and phrases"],
+    ["2.7", "Signature phrases"]
+  ],
+  "3. Manuscript norms": [
+    ["3.1", "Citation style"],
+    ["3.2", "Reference manager"],
+    ["3.3", "Methods-section convention"],
+    ["3.4", "Figure caption length"],
+    ["3.5", "Abstract structure"],
+    ["3.6", "Journal-specific quirks"],
+    ["3.7", "Source-integrity stance"]
+  ],
+  "4. Code stack": [
+    ["4.1", "Primary language"],
+    ["4.1r", "R dialect"],
+    ["4.1rp", "R plotting library"],
+    ["4.1p", "Python scientific stack"],
+    ["4.1pp", "Python plotting library"],
+    ["4.1pe", "Python environment management"],
+    ["4.1b", "Dominance split (both languages)"],
+    ["4.2", "Project layout"],
+    ["4.3", "Naming style"],
+    ["4.4", "Version-control practice"],
+    ["4.5", "Reproducibility expectations"],
+    ["4.6", "Sample script (optional)"]
+  ],
+  "5. Agent roster": [
+    ["5.1", "Domain specialists"],
+    ["5.2", "Specialist sub-topics and methods"]
+  ],
+  "6. Knowledge-base seed": [
+    ["6.1", "Topic 1"],
+    ["6.2", "Topic 2"],
+    ["6.3", "Topic 3"]
+  ],
+  "7. Quality preferences": [
+    ["7.1", "Analytic-gate thresholds"],
+    ["7.2", "Domain gate (name + criteria)"],
+    ["7.3", "Visual gate"],
+    ["7.4", "Literature gate"],
+    ["7.5", "Framing gate"],
+    ["7.6", "Other quality standards"]
+  ]
+};
+
+function getAnswers() {
+  const answers = {};
+  // text inputs and textareas
+  document.querySelectorAll('input[type=text][data-id], textarea[data-id]').forEach(el => {
+    answers[el.dataset.id] = el.value.trim();
+  });
+  // radios
+  document.querySelectorAll('input[type=radio][data-id]:checked').forEach(el => {
+    answers[el.dataset.id] = el.value;
+  });
+  // checkboxes (aggregate by id)
+  document.querySelectorAll('input[type=checkbox][data-id]:checked').forEach(el => {
+    if (!answers[el.dataset.id]) answers[el.dataset.id] = [];
+    if (!Array.isArray(answers[el.dataset.id])) answers[el.dataset.id] = [];
+    answers[el.dataset.id].push(el.value);
+  });
+  return answers;
+}
+
+function countAnswered(answers) {
+  let total = 0, filled = 0;
+  for (const ids of Object.values(PHASES)) {
+    for (const [id] of ids) {
+      total++;
+      const v = answers[id];
+      if (v && (Array.isArray(v) ? v.length > 0 : v.trim().length > 0)) filled++;
+    }
+  }
+  return [filled, total];
+}
+
+function updateProgress() {
+  const [filled, total] = countAnswered(getAnswers());
+  document.getElementById('progress').textContent = filled + ' / ' + total + ' answered';
+}
+
+function buildExportText() {
+  const answers = getAnswers();
+  let out = "SCIENCE-LAB-AI-FRAMEWORK ONBOARDING\n";
+  out += "Generated: " + new Date().toISOString().slice(0, 16).replace('T', ' ') + "\n";
+  out += "Source: setup/lab-onboarding.html\n";
+  out += "=".repeat(70) + "\n\n";
+  out += "INSTRUCTION FOR THE MODEL\n";
+  out += "-".repeat(70) + "\n";
+  out += "Invoke the `lab-onboarding` skill (setup/SKILL.md) in Mode A (ingest\n";
+  out += "export). Use the answers below to populate conventions/, agents/, and\n";
+  out += "knowledge_base/ per the skill's Phase 8 generation rules. Report what\n";
+  out += "was created and prompt the adopter for verification.\n\n";
+  out += "ADOPTER ANSWERS\n";
+  out += "=".repeat(70) + "\n\n";
+
+  for (const [phaseName, ids] of Object.entries(PHASES)) {
+    // skip phases with no answers
+    const phaseHas = ids.some(([id]) => {
+      const v = answers[id];
+      return v && (Array.isArray(v) ? v.length > 0 : v.trim().length > 0);
+    });
+    if (!phaseHas) continue;
+
+    out += "## " + phaseName + "\n\n";
+    for (const [id, label] of ids) {
+      const v = answers[id];
+      if (!v || (Array.isArray(v) && v.length === 0) || (typeof v === 'string' && v.trim().length === 0)) continue;
+      out += "**" + id + " " + label + "**\n";
+      if (Array.isArray(v)) {
+        out += v.map(x => "- " + x).join("\n") + "\n\n";
+      } else {
+        out += v + "\n\n";
+      }
+    }
+  }
+  return out;
+}
+
+function exportAnswers() {
+  const text = buildExportText();
+  document.getElementById('exportText').value = text;
+  document.getElementById('exportModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('exportModal').classList.remove('open');
+}
+
+function copyText() {
+  const t = document.getElementById('exportText');
+  t.select();
+  try {
+    navigator.clipboard.writeText(t.value);
+    setStatus('Copied to clipboard.');
+  } catch (e) {
+    document.execCommand('copy');
+    setStatus('Copied.');
+  }
+}
+
+function downloadText() {
+  const text = document.getElementById('exportText').value;
+  triggerDownload(text);
+}
+
+function downloadDirect() {
+  triggerDownload(buildExportText());
+}
+
+function triggerDownload(text) {
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lab-onboarding.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+  setStatus('Downloaded.');
+}
+
+function saveDraft() {
+  const state = {};
+  document.querySelectorAll('input[type=text][data-id], textarea[data-id]').forEach(el => {
+    state['text:' + el.dataset.id] = el.value;
+  });
+  document.querySelectorAll('input[type=radio][data-id]:checked').forEach(el => {
+    state['radio:' + el.dataset.id] = el.value;
+  });
+  const cbState = {};
+  document.querySelectorAll('input[type=checkbox][data-id]:checked').forEach(el => {
+    if (!cbState[el.dataset.id]) cbState[el.dataset.id] = [];
+    cbState[el.dataset.id].push(el.value);
+  });
+  state['checkboxes'] = cbState;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadDraft() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  let state;
+  try { state = JSON.parse(raw); } catch (e) { return; }
+  for (const [key, val] of Object.entries(state)) {
+    if (key === 'checkboxes') {
+      for (const [id, values] of Object.entries(val)) {
+        document.querySelectorAll('input[type=checkbox][data-id="' + id + '"]').forEach(el => {
+          el.checked = values.includes(el.value);
+        });
+      }
+      continue;
+    }
+    const [type, id] = key.split(':');
+    if (type === 'text') {
+      const el = document.querySelector('input[type=text][data-id="' + id + '"], textarea[data-id="' + id + '"]');
+      if (el) el.value = val;
+    } else if (type === 'radio') {
+      const el = document.querySelector('input[type=radio][data-id="' + id + '"][value="' + cssEscape(val) + '"]');
+      if (el) {
+        el.checked = true;
+        // trigger followup display
+        if (el.dataset.followup) showFollowup(el.dataset.followup);
+      }
+    }
+  }
+  updateProgress();
+}
+
+function cssEscape(s) {
+  return s.replace(/(["\\])/g, '\\$1');
+}
+
+function clearDraft() {
+  if (!confirm('Clear all answers? This cannot be undone.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('input[type=text][data-id], textarea[data-id]').forEach(el => el.value = '');
+  document.querySelectorAll('input[type=radio][data-id], input[type=checkbox][data-id]').forEach(el => el.checked = false);
+  document.querySelectorAll('.followup').forEach(el => el.classList.remove('show'));
+  updateProgress();
+  setStatus('Cleared.');
+}
+
+function setStatus(msg) {
+  const s = document.getElementById('status');
+  s.textContent = msg;
+  setTimeout(() => { s.textContent = ''; }, 3000);
+}
+
+function showFollowup(id) {
+  // hide siblings in the same parent first
+  const target = document.getElementById(id);
+  if (!target) return;
+  const parent = target.parentElement;
+  parent.querySelectorAll('.followup').forEach(el => el.classList.remove('show'));
+  target.classList.add('show');
+}
+
+// wire up followups
+document.querySelectorAll('input[type=radio][data-followup]').forEach(el => {
+  el.addEventListener('change', () => {
+    if (el.checked) showFollowup(el.dataset.followup);
+  });
+});
+
+// radios without followup should hide siblings' followups
+document.querySelectorAll('input[type=radio][name="4.1"]').forEach(el => {
+  el.addEventListener('change', () => {
+    if (el.checked && !el.dataset.followup) {
+      document.querySelectorAll('.followup').forEach(f => f.classList.remove('show'));
+    }
+  });
+});
+
+// save on every input change
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('input', () => { saveDraft(); updateProgress(); });
+  el.addEventListener('change', () => { saveDraft(); updateProgress(); });
+});
+
+// file upload: read into the corresponding textarea
+document.querySelectorAll('input[type=file][data-fileinput]').forEach(input => {
+  input.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const targetId = input.dataset.fileinput;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const target = document.querySelector('textarea[data-id="' + targetId + '"]');
+      if (target) {
+        target.value = ev.target.result;
+        saveDraft();
+        updateProgress();
+        setStatus('Loaded ' + file.name);
+      }
+    };
+    reader.readAsText(file);
+  });
+});
+
+// auto-save every 20s
+setInterval(() => {
+  saveDraft();
+}, 20000);
+
+// auto-load on open
+window.addEventListener('DOMContentLoaded', () => {
+  loadDraft();
+  updateProgress();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor swap files
+*~
+*.bak
+*.swp
+.idea/
+.vscode/
+
+# Python (for tools/tracked-changes/)
+__pycache__/
+*.pyc
+*.pyo
+.python-version
+venv/
+.venv/
+
+# Node (for tools/)
+node_modules/
+npm-debug.log*
+
+# R session files (in case adopters work in the framework dir)
+.Rhistory
+.RData
+.Rproj.user/
+
+# OS / misc
+Thumbs.db
+*.tmp

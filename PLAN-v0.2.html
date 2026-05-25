@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>science-lab-AI-framework: v0.2 plan</title>
+<style>
+  :root {
+    --bg: #faf7f1;
+    --ink: #2a2a2a;
+    --muted: #6a6a66;
+    --rule: #d9d2c2;
+    --card: #ffffff;
+    --accent: #2c5f7c;
+    --accent-soft: #e7eef3;
+    --green: #3d5a3a;
+    --warn-bg: #fbf3df;
+    --warn-border: #d9c178;
+    --code-bg: #f1ede3;
+    --done-bg: #e9f0e7;
+    --done-border: #9bb594;
+  }
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: Charter, "Iowan Old Style", Georgia, serif;
+    font-size: 16.5px;
+    line-height: 1.55;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 40px 96px;
+  }
+  h1, h2, h3, h4 { font-family: "Helvetica Neue", Inter, sans-serif; color: var(--ink); }
+  h1 { font-size: 1.9em; margin: 0 0 4px; }
+  h2 { font-size: 1.35em; margin-top: 2.2em; padding-top: 0.8em; border-top: 1px solid var(--rule); }
+  h3 { font-size: 1.08em; margin-top: 1.6em; color: var(--accent); }
+  h4 { font-size: 0.98em; margin-top: 1.2em; margin-bottom: 0.2em; }
+  .meta { color: var(--muted); font-size: 0.92em; margin-bottom: 1.8em; }
+  p { margin: 0.6em 0; }
+  ul, ol { margin: 0.5em 0; padding-left: 1.4em; }
+  li { margin: 0.25em 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.8em 0 1.2em;
+    font-size: 0.95em;
+  }
+  th, td {
+    border: 1px solid var(--rule);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--accent-soft); font-family: "Helvetica Neue", Inter, sans-serif; font-weight: 600; }
+  code, pre { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.9em; }
+  code { background: var(--code-bg); padding: 1px 5px; border-radius: 3px; }
+  pre {
+    background: var(--code-bg);
+    padding: 14px 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    line-height: 1.45;
+    border-left: 3px solid var(--accent);
+  }
+  pre code { background: transparent; padding: 0; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 1em 0;
+  }
+  .warn {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-left: 3px solid #b88d2e;
+    padding: 12px 16px;
+    border-radius: 3px;
+    margin: 1em 0;
+  }
+  .done {
+    background: var(--done-bg);
+    border: 1px solid var(--done-border);
+    border-left: 3px solid var(--green);
+    padding: 12px 16px;
+    border-radius: 3px;
+    margin: 1em 0;
+  }
+  .keep { color: var(--green); font-weight: 600; }
+  .cut  { color: #a13b2e; font-weight: 600; }
+  .tmpl { color: var(--accent); font-weight: 600; }
+  .small { font-size: 0.9em; color: var(--muted); }
+  hr { border: none; border-top: 1px solid var(--rule); margin: 2em 0; }
+  ol.questions > li { margin-bottom: 0.6em; }
+  .lockmark { display: inline-block; background: var(--green); color: #fff; padding: 1px 8px; border-radius: 3px; font-size: 0.82em; font-family: "Helvetica Neue", Inter, sans-serif; margin-left: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<h1>science-lab-AI-framework: v0.2 plan</h1>
+<p class="meta">Companion deposit for the <em>Beyond the AI Scientist</em> Perspective. Working location: <code>~/Desktop/Manuscripts/AI_science/science-lab-AI-framework/</code>. Plan locked 2026-05-25.</p>
+
+<div class="done"><strong>Status (2026-05-25):</strong> v0.2 build complete. Phases 1 through 8 done via parallel sub-agent dispatch. Phase 9 (top-level README and CLAUDE.md) written in main context. Phase 10 self-audit clean. Phase 11 (Zenodo tag) remains for Jake. The framework is ready for adopter trial.</div>
+
+<h2>1. Locked decisions</h2>
+
+<table>
+<thead><tr><th>Decision</th><th>Resolution</th></tr></thead>
+<tbody>
+  <tr><td>Repo name</td><td><code>science-lab-AI-framework</code></td></tr>
+  <tr><td>Top-level structure</td><td>Six folders: <code>skills/</code>, <code>agents/</code>, <code>knowledge_base/</code>, <code>conventions/</code>, <code>setup/</code>, <code>tools/</code></td></tr>
+  <tr><td>Skills organisation</td><td><code>skills/simple/</code> for one-job skills; <code>skills/workflows/</code> for multi-phase orchestrators. Flat within each (no domain subdivision in v0.2)</td></tr>
+  <tr><td><code>core/</code> as separate folder</td><td>Dissolved. Methodological protocols (iteration workflow, quality gates, visual review, readiness, goal-spec, system-improvement) move into <code>conventions/</code> alongside voice and research rules</td></tr>
+  <tr><td><code>report_workflows/</code></td><td>Dropped entirely. Out of scope for the deposit</td></tr>
+  <tr><td>Opinionated vs template</td><td><code>conventions/research.md</code>, <code>iteration-workflow.md</code>, <code>quality-gates.md</code>, <code>visual-review-protocol.md</code>, <code>system-improvement-protocol.md</code> stay opinionated. Voice, manuscript-format, reply-format, figure-format, code-format, goal-spec, domain-specialist agent become <code>*.template.md</code></td></tr>
+  <tr><td>Knowledge-base integrity</td><td>Any KB-ingest workflow MUST load <code>conventions/research.md</code> and use the <code>literature-extractor</code> + <code>extraction-validator</code> agents. Source faithfulness is non-negotiable</td></tr>
+  <tr><td>Setup interview</td><td>Ship both an HTML form (<code>setup/lab-onboarding.html</code>) and a chat-driven SKILL.md fallback (<code>setup/SKILL.md</code>)</td></tr>
+  <tr><td>Domain-specialist example</td><td>One fictional specialist (computational chemistry or genomics) inside <code>agents/_domain-specialist.template.md</code> as the worked example</td></tr>
+  <tr><td>Dashboard</td><td>Stay on Node. Current functional scope. Parameterise root path. Document Node as an optional dependency in the README</td></tr>
+  <tr><td>Cowork carry-over</td><td>None. Framework is vendor-neutral across AI tools</td></tr>
+  <tr><td>Old <code>DEPOSIT-PLAN.md</code></td><td>Overwritten by this document. The .md will be removed during Phase 1</td></tr>
+</tbody>
+</table>
+
+<h2>2. Folder structure</h2>
+
+<pre><code>science-lab-AI-framework/
+├── README.md                                    <span class="small">- adopter entry point, 5-minute orientation</span>
+├── CLAUDE.md                                    <span class="small">- navigation for any AI instance</span>
+├── LICENSE-DOCS  /  LICENSE-CODE
+├── PLAN-v0.2.html                               <span class="small">- this document (active design memo)</span>
+│
+├── skills/
+│   ├── README.md
+│   ├── simple/                                  <span class="small">- one-job SKILL.md files</span>
+│   │   ├── analysis-planning/SKILL.md
+│   │   ├── code-writing/SKILL.md                <span class="small">(was code-implementation)</span>
+│   │   ├── code-review/SKILL.md
+│   │   ├── manuscript-writing/SKILL.md          <span class="small">- daily prose work</span>
+│   │   ├── manuscript-builder/SKILL.md          <span class="small">- render to .docx</span>
+│   │   ├── reply-writing/SKILL.md               <span class="small">- single reviewer comment</span>
+│   │   ├── reviewer-reply-planning/SKILL.md
+│   │   ├── reviewer-reply-drafting/SKILL.md
+│   │   └── topic-writing/SKILL.md               <span class="small">- synthesis, perspective, blog</span>
+│   └── workflows/                               <span class="small">- multi-phase orchestrators</span>
+│       ├── analysis-pipeline/SKILL.md
+│       ├── research-iterate/SKILL.md
+│       ├── paper-research/SKILL.md              <span class="small">(was paper-research-workflow)</span>
+│       ├── expert-review/SKILL.md
+│       ├── manuscript-pipeline/SKILL.md
+│       └── reviewer-reply-pipeline/SKILL.md
+│
+├── agents/                                      <span class="small">- specialist sub-agent role files</span>
+│   ├── README.md
+│   ├── lab-director.md                          <span class="keep">core</span>
+│   ├── quantitative-scientist.md                <span class="keep">core</span>
+│   ├── science-writer.md                        <span class="keep">core</span>
+│   ├── literature-extractor.md                  <span class="keep">core</span>
+│   ├── extraction-validator.md                  <span class="keep">core</span>
+│   └── _domain-specialist.template.md           <span class="tmpl">template + 1 fictional example</span>
+│
+├── knowledge_base/                              <span class="small">- topic wiki scaffolding</span>
+│   ├── README.md
+│   ├── SKILL.md                                 <span class="small">- ingest / compile / query / maintain (loads research.md)</span>
+│   ├── GLOBAL-CONCEPTS.template.md              <span class="tmpl">template</span>
+│   └── _topic.template/                         <span class="tmpl">empty skeleton</span>
+│       ├── INDEX.md
+│       └── example-article.md
+│
+├── conventions/                                 <span class="small">- everything skills load as references</span>
+│   ├── README.md
+│   ├── research.md                              <span class="keep">opinionated</span> <span class="small">- source faithfulness, citation accuracy, no-hallucination</span>
+│   ├── iteration-workflow.md                    <span class="keep">opinionated</span> <span class="small">- six-phase loop (from core/)</span>
+│   ├── research-quality-gates.md                <span class="keep">opinionated</span> <span class="small">- analytic/visual/literature/framing gates</span>
+│   ├── visual-review-protocol.md                <span class="keep">opinionated</span> <span class="small">- render-and-read</span>
+│   ├── system-improvement-protocol.md           <span class="keep">opinionated</span> <span class="small">- self-update mechanism</span>
+│   ├── voice.template.md                        <span class="tmpl">template</span>
+│   ├── manuscript-format.template.md            <span class="tmpl">template</span>
+│   ├── reply-format.template.md                 <span class="tmpl">template</span>
+│   ├── figure-format.template.md                <span class="tmpl">template</span>
+│   ├── code-format.template.md                  <span class="tmpl">template</span>
+│   ├── goal-spec.template.md                    <span class="tmpl">template (from core/)</span>
+│   └── readiness-assessment.md                  <span class="keep">opinionated</span> <span class="small">- expertise coverage check</span>
+│
+├── setup/                                       <span class="small">- AI-assisted onboarding</span>
+│   ├── README.md
+│   ├── SKILL.md                                 <span class="small">- orchestrator: interview &#8594; populate templates</span>
+│   ├── lab-onboarding.html                      <span class="small">- self-contained form, localStorage, export-to-text</span>
+│   └── prompts/
+│       ├── voice-from-samples.md
+│       ├── code-format-from-repo.md
+│       └── kb-topic-seed.md
+│
+└── tools/                                       <span class="small">- runnable code</span>
+    ├── README.md
+    ├── generate-state.js                        <span class="small">- dashboard generator (Node, parameterised root)</span>
+    └── system-dashboard.html                    <span class="small">- example output, regenerable</span>
+</code></pre>
+
+<h2>3. What stays opinionated vs becomes template</h2>
+
+<p>The cut between "ship as-is, adopt without editing" and "ship as scaffolding, adopter fills in" is the architectural heart of the deposit. Items inside <code>conventions/</code> are split as follows.</p>
+
+<h3>Opinionated (ship as-is)</h3>
+
+<table>
+<thead><tr><th>File</th><th>Why it stays opinionated</th></tr></thead>
+<tbody>
+  <tr><td><code>research.md</code></td><td>Source-faithfulness contract, citation accuracy rules, lit-search QC, anti-hallucination. The hardest-won safeguard in the framework. KB ingest workflows mandatorily load this</td></tr>
+  <tr><td><code>iteration-workflow.md</code></td><td>The six-phase research-iterate loop. Structural pattern is general across domains</td></tr>
+  <tr><td><code>research-quality-gates.md</code></td><td>Analytic / visual / literature / framing gates. Generic acceptance criteria</td></tr>
+  <tr><td><code>visual-review-protocol.md</code></td><td>Render-and-read protocol for figures. Cross-disciplinary utility</td></tr>
+  <tr><td><code>readiness-assessment.md</code></td><td>Phase 0 expertise-coverage check</td></tr>
+  <tr><td><code>system-improvement-protocol.md</code></td><td>How the framework updates itself. Self-referential, reusable as-is</td></tr>
+</tbody>
+</table>
+
+<h3>Templates (adopter fills)</h3>
+
+<table>
+<thead><tr><th>File</th><th>What template means here</th></tr></thead>
+<tbody>
+  <tr><td><code>voice.template.md</code></td><td>Structured slots: register, hedging calibration, banned words, punctuation rules, sentence rhythm, signature phrases. Each slot has 1-2 sentences of guidance plus a worked example from a fictional adopter lab</td></tr>
+  <tr><td><code>manuscript-format.template.md</code></td><td>IMRAD skeleton; section-by-section slots for "what your lab puts here" with prompts</td></tr>
+  <tr><td><code>reply-format.template.md</code></td><td>Reviewer-response skeleton: comment-typing taxonomy slot, tone slot, push-back conventions slot</td></tr>
+  <tr><td><code>figure-format.template.md</code></td><td>Tooling-agnostic skeleton; palette, typography, export rules</td></tr>
+  <tr><td><code>code-format.template.md</code></td><td>Project structure, naming, performance, testing slots. Avoid R-vs-Python prescription</td></tr>
+  <tr><td><code>goal-spec.template.md</code></td><td>Per-project endpoint definition (was in core/)</td></tr>
+  <tr><td><code>agents/_domain-specialist.template.md</code></td><td>Role skeleton + one worked example (a fictional non-fisheries specialist)</td></tr>
+  <tr><td><code>knowledge_base/_topic.template/</code></td><td>One placeholder topic showing INDEX.md structure and one example article. No real content</td></tr>
+</tbody>
+</table>
+
+<p>Naming convention: <code>*.template.md</code> makes the distinction visible in <code>ls</code> output. Adopter populates <code>voice.template.md</code> and saves as <code>voice.md</code>. Skill loaders look for the populated version first; fall back to a "configure voice via setup" message that points to <code>setup/SKILL.md</code>.</p>
+
+<h2>4. The adopter experience</h2>
+
+<h3>Component-level READMEs</h3>
+
+<p>Each of the six top-level folders gets a README of roughly 1-2 pages with a fixed five-section structure:</p>
+
+<ol>
+  <li><strong>What this folder is for.</strong> One paragraph tying it to the §3 architectural fundamental from the paper (or to its supporting role for those fundamentals)</li>
+  <li><strong>How it is structured.</strong> File-by-file map with a one-line purpose for each</li>
+  <li><strong>How to populate.</strong> Pointer to <code>setup/SKILL.md</code> for AI-assisted, plus manual instructions for the advanced path</li>
+  <li><strong>What good looks like.</strong> Worked example (~10 lines of a populated file) so the adopter has a concrete target</li>
+  <li><strong>How it connects.</strong> List of cross-references at runtime (e.g., which skills load this convention)</li>
+</ol>
+
+<h3>Setup interview flow</h3>
+
+<p>Two routes to populate the templates:</p>
+
+<ol>
+  <li><strong>HTML form</strong> (<code>setup/lab-onboarding.html</code>): single self-contained HTML, localStorage-persisted, export-to-text button. Sections: lab identity, voice (paste sample paragraphs, set preferences), manuscript norms, code stack, agent roster, KB seed topics, quality preferences. Adopter fills the form, exports the result, pastes into any LLM with the printed prompt block</li>
+  <li><strong>Chat-driven</strong> (<code>setup/SKILL.md</code>): the same questions delivered as an interview by the LLM, for adopters who prefer chat over a browser form</li>
+</ol>
+
+<p>Both routes terminate in the same outcome: the LLM uses the answers as input to <code>setup/SKILL.md</code>, which generates populated versions of <code>voice.md</code>, <code>manuscript-format.md</code>, <code>code-format.md</code>, etc., plus stubs for <code>agents/&lt;domain-specialist&gt;.md</code> files based on the interview answers. The adopter reviews, edits, commits.</p>
+
+<p>Target: fork-to-running in roughly one focused hour, compared with a day-or-more manual carve.</p>
+
+<h2>5. Migration plan</h2>
+
+<table>
+<thead><tr><th>Phase</th><th>Work</th><th>Est. effort</th><th>Status</th></tr></thead>
+<tbody>
+  <tr><td>1</td><td>Rename folder to <code>science-lab-AI-framework/</code>. Create <code>skills/{simple, workflows}/</code> and <code>setup/</code>. Delete deprecated stubs: <code>code_workflows/</code>, <code>manuscript_workflows/</code>, <code>review_workflows/</code>, <code>report_workflows/</code>, <code>core/</code>, <code>conventions/supporting/</code>. Remove old <code>DEPOSIT-PLAN.md</code></td><td>1 hr</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>2</td><td>Carve opinionated core into <code>conventions/</code>: <code>research.md</code>, <code>iteration-workflow.md</code>, <code>research-quality-gates.md</code>, <code>visual-review-protocol.md</code>, <code>readiness-assessment.md</code>, <code>system-improvement-protocol.md</code>. Strip Brownscombe / fisheries / telemetry content; preserve protocol logic. Carve the five core agent files</td><td>4-6 hr (delivered via parallel sub-agent dispatch)</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>3</td><td>Build the <code>*.template.md</code> files: voice, manuscript-format, reply-format, figure-format, code-format, goal-spec, domain-specialist. Each gets slot layout + fictional-lab worked example + inline prompts for the adopter</td><td>5-7 hr (delivered via sub-agent)</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>4</td><td>Audit and trim the skill SKILL.md files (simple and workflows). Mostly generic already; the work is pruning lab-specific examples and ensuring "load convention X" references point to renamed paths</td><td>3-4 hr (delivered via 3 parallel sub-agents)</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>5</td><td>Build <code>knowledge_base/SKILL.md</code> (wire it to <code>research.md</code> and the literature-extractor + extraction-validator agents). Build <code>GLOBAL-CONCEPTS.template.md</code> and the empty <code>_topic.template/</code> skeleton</td><td>2-3 hr (delivered via sub-agent)</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>6</td><td>Write six component READMEs (skills, agents, knowledge_base, conventions, setup, tools)</td><td>3-4 hr (delivered via sub-agent)</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>7</td><td>Build <code>setup/lab-onboarding.html</code> and <code>setup/SKILL.md</code>. Test on a fictional adopter lab</td><td>4-6 hr (delivered via sub-agent)</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>8</td><td>Wire the dashboard: parameterise root path in <code>tools/generate-state.js</code>; ship example <code>system-dashboard.html</code>; document Node dependency</td><td>2-3 hr (delivered via sub-agent)</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>9</td><td>Rewrite top-level <code>README.md</code> and <code>CLAUDE.md</code>. Feature the AI-assisted onboarding as the primary route</td><td>1-2 hr (in main context)</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>10</td><td>Self-audit: grep for Brownscombe / fisheries / telemetry / JWB; verify every cross-reference resolves; verify dashboard runs from a relative root</td><td>1 hr (in main context)</td><td><span class="keep">Done</span></td></tr>
+  <tr><td>11</td><td>Tag v0.2, push to public GitHub at <code>science-lab-AI-framework</code>, mint Zenodo DOI, update manuscript Box 1 and references</td><td>1 hr</td><td>Pending (Jake's manual step)</td></tr>
+</tbody>
+</table>
+
+<p>Total: roughly 27-39 hours, spread across three or four focused sessions.</p>
+
+<h2>6. Phase 2 flagged items</h2>
+
+<p>Sub-agents flagged the following calls during the carve. Each is a small judgment call worth your sign-off before Phase 3 begins; most are one-line fixes.</p>
+
+<h3>Path / reference corrections (quick yes-or-no)</h3>
+
+<table>
+<thead><tr><th>File</th><th>Flag</th><th>Recommended fix</th></tr></thead>
+<tbody>
+  <tr><td><code>conventions/research.md</code></td><td>Sub-agent left conditional language for <code>topic-format.md</code> and <code>reply-format.md</code> (uncertain which the deposit ships)</td><td>Drop <code>topic-format.md</code> reference entirely (not shipping). Rewrite <code>reply-format.md</code> as direct path to <code>conventions/reply-format.template.md</code> (does ship)</td></tr>
+  <tr><td><code>conventions/iteration-workflow.md</code></td><td>Phase 2 references "analysis-pipeline workflow (if your fork ships one)"</td><td>Rewrite as direct path to <code>skills/workflows/analysis-pipeline/SKILL.md</code> (does ship)</td></tr>
+</tbody>
+</table>
+
+<h3>Naming and structural calls (your decision)</h3>
+
+<table>
+<thead><tr><th>File</th><th>Call</th><th>Default taken</th></tr></thead>
+<tbody>
+  <tr><td><code>conventions/research-quality-gates.md</code></td><td>Renamed "Ecological Gate" to neutralise</td><td>"Domain Plausibility Gate". Alternatives: "Substantive Gate", "Mechanism Gate", "Domain Gate". Pick one</td></tr>
+  <tr><td><code>conventions/visual-review-protocol.md</code></td><td>Test 5 (Physical Plausibility) was added 2026-04-17 in source. Kept the test, stripped the provenance note</td><td>Keep as-is unless you want it dropped</td></tr>
+</tbody>
+</table>
+
+<h3>Concreteness trade-offs (worth a fuller discussion)</h3>
+
+<p>Three places where the carve traded specificity for neutrality. Worth deciding case by case whether to add a neutral worked example back, or accept the abstraction.</p>
+
+<table>
+<thead><tr><th>File</th><th>What was stripped</th><th>What replaced it</th></tr></thead>
+<tbody>
+  <tr><td><code>agents/lab-director.md</code></td><td>Keyword-to-specialist routing table (telemetry &#8594; movement ecologist, accelerometry &#8594; physiological ecologist, etc.)</td><td>Pointer to per-lab CLAUDE.md routing tables. Option: add one generic example table (e.g., a fictional biology lab's mappings)</td></tr>
+  <tr><td><code>agents/lab-director.md</code></td><td>Multi-specialist convening table (which combinations pull which specialists for which task type)</td><td>General principle. Option: add one or two worked cross-domain examples</td></tr>
+  <tr><td><code>agents/literature-extractor.md</code></td><td>Four worked Redside Dace examples (hard endpoint, preference range, field survey, do-not-extract)</td><td>Four abstract patterns. Option: add one numeric worked example with placeholder values (e.g., a generic thermal-tolerance walkthrough)</td></tr>
+</tbody>
+</table>
+
+<p>Recommendation on the three: add one fictional worked example to each. Adopters learn the pattern faster from a concrete case than from a principle. The fictional lab from the <code>agents/_domain-specialist.template.md</code> example (genomics or computational chemistry) can be reused as the running fictional lab across all worked examples for consistency.</p>
+
+<h2>7. What changes about the v0.1 README and CLAUDE.md</h2>
+
+<ul>
+  <li>README's "How to fork and adapt" eight-step list becomes "Two paths: AI-assisted onboarding (recommended) or manual editing (advanced)". Setup interview is mentioned in the first three lines</li>
+  <li>CLAUDE.md routing tables drop <code>report_workflows/</code>, gain <code>setup/</code>, restructure under <code>skills/{simple, workflows}/</code>; the <code>core/</code> table is removed and entries merged into the conventions table</li>
+  <li>Always-load conventions table loses <code>report-format.md</code> and <code>topic-format.md</code>; voice/format references point to <code>*.template.md</code> by default with a footnote that the populated version takes precedence</li>
+  <li>Status footer shifts from "v0.1 carve-out" to "v0.2 reference architecture"</li>
+</ul>
+
+<hr>
+
+<p class="small">Active document. Updated as phases complete.</p>
+
+</body>
+</html>

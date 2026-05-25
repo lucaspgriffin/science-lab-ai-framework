@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>science-lab-AI-framework: v0.2 build report</title>
+<style>
+  :root {
+    --bg: #faf7f1;
+    --ink: #2a2a2a;
+    --muted: #6a6a66;
+    --rule: #d9d2c2;
+    --card: #ffffff;
+    --accent: #2c5f7c;
+    --accent-soft: #e7eef3;
+    --green: #3d5a3a;
+    --warn-bg: #fbf3df;
+    --warn-border: #d9c178;
+    --code-bg: #f1ede3;
+    --done-bg: #e9f0e7;
+    --done-border: #9bb594;
+    --flag-bg: #f5ecd9;
+    --flag-border: #c9a86a;
+  }
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: Charter, "Iowan Old Style", Georgia, serif;
+    font-size: 16.5px;
+    line-height: 1.55;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 40px 96px;
+  }
+  h1, h2, h3, h4 { font-family: "Helvetica Neue", Inter, sans-serif; color: var(--ink); }
+  h1 { font-size: 1.95em; margin: 0 0 4px; }
+  h2 { font-size: 1.35em; margin-top: 2.2em; padding-top: 0.8em; border-top: 1px solid var(--rule); }
+  h3 { font-size: 1.08em; margin-top: 1.6em; color: var(--accent); }
+  h4 { font-size: 0.98em; margin-top: 1.2em; margin-bottom: 0.2em; }
+  .meta { color: var(--muted); font-size: 0.92em; margin-bottom: 1.8em; }
+  p { margin: 0.6em 0; }
+  ul, ol { margin: 0.5em 0; padding-left: 1.4em; }
+  li { margin: 0.25em 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.8em 0 1.2em;
+    font-size: 0.95em;
+  }
+  th, td {
+    border: 1px solid var(--rule);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--accent-soft); font-family: "Helvetica Neue", Inter, sans-serif; font-weight: 600; }
+  code, pre { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.9em; }
+  code { background: var(--code-bg); padding: 1px 5px; border-radius: 3px; }
+  pre {
+    background: var(--code-bg);
+    padding: 14px 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    line-height: 1.45;
+    border-left: 3px solid var(--accent);
+  }
+  pre code { background: transparent; padding: 0; }
+  .done {
+    background: var(--done-bg);
+    border: 1px solid var(--done-border);
+    border-left: 3px solid var(--green);
+    padding: 14px 18px;
+    border-radius: 3px;
+    margin: 1em 0;
+  }
+  .flag {
+    background: var(--flag-bg);
+    border: 1px solid var(--flag-border);
+    border-left: 3px solid #b88d2e;
+    padding: 12px 16px;
+    border-radius: 3px;
+    margin: 1em 0;
+  }
+  .keep { color: var(--green); font-weight: 600; }
+  .cut  { color: #a13b2e; font-weight: 600; }
+  .tmpl { color: var(--accent); font-weight: 600; }
+  .small { font-size: 0.9em; color: var(--muted); }
+  hr { border: none; border-top: 1px solid var(--rule); margin: 2em 0; }
+  .num {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 0 8px;
+    border-radius: 12px;
+    font-family: "Helvetica Neue", Inter, sans-serif;
+    font-weight: 600;
+    font-size: 0.85em;
+  }
+  .stack {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 1em 0;
+  }
+  .stack > div {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 14px 18px;
+  }
+  .stack h4 { margin-top: 0; }
+  @media (max-width: 720px) {
+    .stack { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>science-lab-AI-framework: v0.2 build report</h1>
+<p class="meta">Single-session sub-agent dispatch. 2026-05-25. Location: <code>~/Desktop/Manuscripts/AI_science/science-lab-AI-framework/</code>.</p>
+
+<div class="done"><strong>Build status: complete.</strong> The framework is structurally finished and ready for adopter trial. Eleven phases planned; ten executed, the last (Zenodo tag and DOI mint) is your manual step. Six parallel sub-agents handled the heavy carving and template build; main context handled the top-level README, CLAUDE.md, self-audit, and integration. Total elapsed time from "go" to "report": under two hours.</div>
+
+<h2>1. What was built</h2>
+
+<h3>Inventory</h3>
+
+<table>
+<thead><tr><th>Folder</th><th>Count</th><th>Detail</th></tr></thead>
+<tbody>
+  <tr><td><code>skills/simple/</code></td><td>9 SKILL.md</td><td>analysis-planning, code-writing, code-review, manuscript-writing, manuscript-builder, reply-writing, reviewer-reply-planning, reviewer-reply-drafting, topic-writing</td></tr>
+  <tr><td><code>skills/workflows/</code></td><td>6 SKILL.md</td><td>analysis-pipeline, research-iterate, paper-research, expert-review, manuscript-pipeline, reviewer-reply-pipeline</td></tr>
+  <tr><td><code>agents/</code></td><td>5 core + 1 template + 1 README</td><td>lab-director, quantitative-scientist, science-writer, literature-extractor, extraction-validator; plus <code>_domain-specialist.template.md</code></td></tr>
+  <tr><td><code>knowledge_base/</code></td><td>4 scaffold + 1 README</td><td>SKILL.md, GLOBAL-CONCEPTS.template.md, _topic.template/INDEX.md, _topic.template/example-article.md</td></tr>
+  <tr><td><code>conventions/</code></td><td>12 + 1 README</td><td>6 opinionated (research, iteration-workflow, research-quality-gates, visual-review-protocol, readiness-assessment, system-improvement-protocol) and 6 templates (voice, manuscript-format, reply-format, figure-format, code-format, goal-spec)</td></tr>
+  <tr><td><code>setup/</code></td><td>5 + 1 README</td><td>SKILL.md, lab-onboarding.html (960 lines, 40 KB, 44 inputs across 7 phases), 3 helper prompt files</td></tr>
+  <tr><td><code>tools/</code></td><td>3 + 1 README</td><td>generate-state.js (440 lines), system-dashboard.html (790 lines, 28 KB), system-state.json (regenerated)</td></tr>
+  <tr><td>Root</td><td>5 files</td><td>README.md (the GitHub pitch page), CLAUDE.md, PLAN-v0.2.html (design memo), BUILD-REPORT-v0.2.html (this file), LICENSE-DOCS and LICENSE-CODE</td></tr>
+</tbody>
+</table>
+
+<p><strong>Total files written or rewritten this session:</strong> roughly 50, plus the regenerated dashboard JSON. Old <code>conventions/voice.md</code> (lab-specific) deleted; the v0.1 stub folders (<code>code_workflows/</code>, <code>manuscript_workflows/</code>, <code>review_workflows/</code>, <code>report_workflows/</code>, <code>core/</code>, <code>conventions/supporting/</code>) and the v0.1 <code>DEPOSIT-PLAN.md</code> are gone.</p>
+
+<h3>The dashboard output</h3>
+
+<p>Running <code>node tools/generate-state.js</code> produces <code>tools/system-state.json</code> (31.9 KB) summarising the framework. Current snapshot:</p>
+
+<pre><code>{
+  "totals": {
+    "skills_simple": 9, "skills_workflows": 6, "skills": 15,
+    "agents_core": 5, "agents_templates": 1,
+    "kb_topics": 0, "kb_topic_templates": 1, "kb_articles": 0,
+    "conventions_total": 12,
+    "conventions_populated": 6, "conventions_template_only": 6,
+    "setup_prompts": 3
+  }
+}</code></pre>
+
+<p>Open <code>tools/system-dashboard.html</code> in a browser to view it. The dashboard fetches <code>system-state.json</code> automatically; if you serve from a static HTTP server (<code>python3 -m http.server</code>) the dashboard renders six panels: Overview, Skills, Agents, Knowledge Base, Conventions, Setup.</p>
+
+<h2>2. Sub-agent dispatch summary</h2>
+
+<p>Six general-purpose sub-agents ran in parallel after Phase 1 (folder restructure) completed. Each carried a self-contained brief: source paths, target paths, strip rules, cross-reference rewrites, voice constraints, fictional adopter lab (the "example genomics lab"), and report format.</p>
+
+<table>
+<thead><tr><th>Sub-agent</th><th>Files produced</th><th>Notable</th></tr></thead>
+<tbody>
+  <tr><td>Phase 2 touch-ups + Phase 3 templates</td><td>7 templates + 4 touch-up edits + deleted v0.1 voice.md</td><td>All templates anchored consistently to the genomics-lab worked examples (Sox2/Pou5f1, scRNA-seq, ATAC-seq, <em>Nature Genetics</em>, Python+R, snakemake)</td></tr>
+  <tr><td>Skill carves: code + topic</td><td>6 SKILL.md (analysis-planning, code-writing, code-review, analysis-pipeline, research-iterate, topic-writing)</td><td><code>code-implementation</code> renamed to <code>code-writing</code> consistently across cross-references</td></tr>
+  <tr><td>Skill carves: manuscript</td><td>5 SKILL.md (manuscript-writing, manuscript-builder, paper-research, expert-review, manuscript-pipeline)</td><td><code>paper-research-workflow</code> renamed to <code>paper-research</code>; reviewer expertise example switched from "digital twins" to single-cell genomics panel</td></tr>
+  <tr><td>Skill carves: review</td><td>4 SKILL.md (reply-writing, reviewer-reply-planning, reviewer-reply-drafting, reviewer-reply-pipeline)</td><td>Quality gate list deduplicated (source had a numbering bug); fish examples to scRNA-seq batch-correction</td></tr>
+  <tr><td>KB scaffold + component READMEs</td><td>4 KB files + 6 component READMEs</td><td>Source-faithfulness enforcement wired into <code>knowledge_base/SKILL.md</code>: every ingest must load <code>research.md</code> and use <code>literature-extractor</code> + <code>extraction-validator</code> agents</td></tr>
+  <tr><td>Setup interview</td><td>1 SKILL.md + 1 HTML form + 3 helper prompts</td><td>Dual-mode (HTML export ingest or chat-driven interview); localStorage persistence; conditional follow-ups; export-to-text with embedded model instruction header</td></tr>
+  <tr><td>Dashboard tooling</td><td>1 generator + 1 viewer + 1 README</td><td>Source generator was 1009 lines with 13 lab-specific sections; deposit version is 440 lines, parameterised on framework root, no npm dependencies</td></tr>
+</tbody>
+</table>
+
+<p class="small">Total sub-agent tokens: roughly 1.5 M tokens across the six dispatches. Total wall-clock: about 12 minutes from launch to last completion.</p>
+
+<h2>3. Quality checks</h2>
+
+<h3>Em-dash audit</h3>
+
+<p>Hard ban enforced across all adopter-facing files. After sub-agent carve, four residual em-dashes were found in titles (<code>CLAUDE.md</code>, <code>PLAN-v0.2.html</code>, <code>setup/lab-onboarding.html</code> title and export header). All four fixed in main context. Remaining em-dashes appear only inside demonstration tables in <code>voice.template.md</code> and <code>conventions/README.md</code>, where they are intentional (showing what the rule bans).</p>
+
+<h3>Lab-specific content audit</h3>
+
+<p>Grep for <code>brownscombe</code>, <code>jwb</code>, <code>jake</code>, <code>fisheries</code>, <code>bonefish</code>, <code>muskellunge</code>, <code>walleye</code>, <code>permit</code>, <code>round goby</code> across the deposit:</p>
+
+<ul>
+  <li>Three legitimate citations in <code>README.md</code>, <code>CLAUDE.md</code>, <code>setup/SKILL.md</code>: all reference <code>Brownscombe et al., in preparation</code> as the companion paper. Intentional.</li>
+  <li>Acknowledgments line in <code>README.md</code> attributing the origin to the Brownscombe Lab at Fisheries and Oceans Canada. Intentional.</li>
+  <li>The PLAN-v0.2.html design memo references "Brownscombe" / "fisheries" in the context of describing the carve. Intentional (design memo).</li>
+  <li>Zero matches in any skill, agent, convention, KB, setup, or tool file.</li>
+</ul>
+
+<h3>Old-path audit</h3>
+
+<p>Grep for <code>code_workflows/</code>, <code>manuscript_workflows/</code>, <code>review_workflows/</code>, <code>report_workflows/</code>, <code>species_workflows/</code> across the deposit: zero matches outside <code>PLAN-v0.2.html</code> (design memo, intentional). All cross-references in skills, agents, and conventions now use the new <code>skills/{simple, workflows}/</code> paths.</p>
+
+<h2>4. Resolved items from the first review pass</h2>
+
+<p>All six items raised after the first sub-agent dispatch are now resolved.</p>
+
+<div class="done">
+<strong>Q1 Quality-gate naming.</strong> Resolved as <strong>"Domain Gate"</strong>. Applied in <code>conventions/research-quality-gates.md</code> §2 and in the gate list in <code>skills/workflows/research-iterate/SKILL.md</code>.
+</div>
+
+<div class="done">
+<strong>Q2 Tracked-changes rendering infrastructure.</strong> Resolved by shipping the scripts. The two Python files lived inside the <code>review_workflows/reviewer-reply-drafting.skill</code> bundle in the working framework (the earlier sub-agent extracted only the SKILL.md). They are now at <code>tools/tracked-changes/apply_tracked_changes.py</code> (39 KB) and <code>tools/tracked-changes/render_tracked_docx.py</code> (22 KB), with a dedicated <code>tools/tracked-changes/README.md</code> covering dependencies (Python 3.8+, lxml, pandoc), markup convention, and integration. Lab-specific docstring examples (<code>Jacob Brownscombe</code>, <code>Claude_files/</code>) stripped from the scripts.
+</div>
+
+<div class="done">
+<strong>Q3 <code>Claude_files/</code> folder naming.</strong> Renamed to <code>workflow_intermediates/</code> across 3 skill files and inside the two Python scripts.
+</div>
+
+<div class="done">
+<strong>Q4 / Q6 Worked-example domain.</strong> The deposit owner cannot verify computational-genomics examples, so the fictional adopter lab was swapped to <strong>a generic terrestrial-ecology lab</strong> (small-mammal population dynamics, camera traps, mark-recapture, vegetation transects, occupancy modelling, GLMMs / GAMs, targeting <em>J Anim Ecol</em> / <em>Ecography</em> / <em>Methods in Ecology and Evolution</em>). ~35 files updated by sub-agent: every template, every worked example block in skills and agents, the KB topic skeleton, the routing table in <code>lab-director.md</code>, the worked numeric example in <code>literature-extractor.md</code>, the setup form placeholders. Residue audit clean: zero genomics terms remain outside this report and the design memo.
+</div>
+
+<div class="done">
+<strong>Q5 Validation log icons.</strong> Left as plain text "PASS / FAIL / FLAGGED" per your call.
+</div>
+
+<h3>Minor items flagged by the ecology-swap sub-agent (none blocking)</h3>
+
+<div class="flag">
+<strong>Camera-Trap Wildlife Specialist persona-name choice.</strong> The brief allowed either "Camera-Trap Wildlife Specialist" or "Small-Mammal Population Ecologist". The agent chose the camera-trap framing as the lead specialist and added a separate small-mammal-population-ecologist for mark-recapture work. Both exist in the routing table. Easy to consolidate if you prefer a single detection-methods specialist.
+</div>
+
+<div class="flag">
+<strong>Citation provenance in the KB example article.</strong> The worked KB article on detection probability uses genuine ecology papers (MacKenzie et al. 2002, Burton et al. 2015) with plausible-but-invented page-number references. A "Template usage notes" block instructs replacement before publication, consistent with the original article posture. Worth a manual check.
+</div>
+
+<div class="flag">
+<strong>Manuscript length norms.</strong> <code>conventions/manuscript-format.template.md</code> defaults to <em>J Anim Ecol</em> norms (~6,000-8,000 body words including methods). Adopters can shift if they target tighter journals.
+</div>
+
+<h2>5. Logo and branding recommendations</h2>
+
+<p>You asked for recommendations on making this look polished and professional. A logo is the highest-leverage visual investment for a GitHub repo because it shows up in the README hero, the social-preview card, the favicon, and the dashboard header.</p>
+
+<h3>Logo concept directions</h3>
+
+<p>Three directions, in increasing abstraction. Any of them work; pick the one that reads most naturally to your audience.</p>
+
+<div class="stack">
+  <div>
+    <h4>Direction A: Network + flask</h4>
+    <p>An abstract Erlenmeyer flask outline with neural-network nodes inside. Visually signals "lab + AI". Risk: feels generic.</p>
+  </div>
+  <div>
+    <h4>Direction B: Three-node graph</h4>
+    <p>Three connected nodes representing skills, sub-agents, and knowledge bases (the paper's three architectural fundamentals), with the working scientist as a fourth orienting node. Visually maps the architecture. Best alignment with the paper.</p>
+  </div>
+  <div>
+    <h4>Direction C: Stylised initials</h4>
+    <p>Letterform "SLA" or "SLAF" as a clean monogram. Lowest-risk option. Easy to scale down to favicon. Works well as a wordmark next to the full name.</p>
+  </div>
+</div>
+
+<p><strong>My recommendation: Direction B.</strong> It encodes the architectural argument in the visual, which makes the logo do double work (brand mark and conceptual cue).</p>
+
+<h3>Style and palette</h3>
+
+<ul>
+  <li><strong>Style:</strong> minimal flat design. Two colours plus optional accent. No gradients. No 3D. No decorative typography. The repo is academic infrastructure; the logo should read as engineered, not designed.</li>
+  <li><strong>Palette:</strong> deep navy (<code>#1c3a5e</code> or <code>#2c5f7c</code>) + warm off-white (<code>#faf7f1</code>) + optional accent (sage green <code>#6d9b6d</code> or amber <code>#d9a55b</code>). The off-white matches the dashboard background; the navy matches the dashboard accent. Continuity across surfaces.</li>
+  <li><strong>Typography for wordmark:</strong> Inter, IBM Plex Sans, or a humanist sans. Tracking slightly tightened. Lowercase preferred for modernity; <code>science-lab-AI-framework</code> with the "AI" subtly emphasised (different weight) reads naturally.</li>
+</ul>
+
+<h3>Where to commission</h3>
+
+<table>
+<thead><tr><th>Option</th><th>Cost</th><th>Best for</th></tr></thead>
+<tbody>
+  <tr><td>Fiverr / Upwork direct hire</td><td>USD 30-150</td><td>Quick turnaround, clear brief, modest expectations</td></tr>
+  <tr><td>99designs contest</td><td>USD 299+</td><td>Multiple concepts, more polish, higher cost</td></tr>
+  <tr><td>Local design student or academic illustrator</td><td>Negotiable</td><td>Better-aligned aesthetic, sometimes pro bono for citation</td></tr>
+  <tr><td>DIY in Figma or Inkscape</td><td>Free</td><td>You enjoy the work and have an hour</td></tr>
+  <tr><td>Adobe Express / LogoMakr / Looka</td><td>Free or low-cost</td><td>Quick first pass, expect to refine in vector software</td></tr>
+</tbody>
+</table>
+
+<p>For an academic deposit, my lean is <strong>a Fiverr designer at USD 50-100</strong>: cheap enough that you can iterate twice if the first attempt misses, expensive enough to attract designers who deliver clean SVG.</p>
+
+<h3>What to commission (deliverables list)</h3>
+
+<p>Provide the designer this exact list:</p>
+
+<ol>
+  <li><strong>Master SVG</strong> (vector, single-colour and multi-colour versions).</li>
+  <li><strong>PNG renders</strong> at 1024×1024, 512×512, 256×256, 128×128.</li>
+  <li><strong>Favicon ICO</strong> at 32×32 and 16×16.</li>
+  <li><strong>Wordmark version</strong> (logo + full repo name, horizontal layout).</li>
+  <li><strong>GitHub social preview card</strong>: 1280×640 PNG. Logo + repo name + one-line tagline ("A reference framework for the hybrid digital lab"). Set as the repo's social preview in GitHub settings.</li>
+  <li><strong>Source files</strong> (Figma file or Adobe Illustrator AI file) for future editing.</li>
+</ol>
+
+<p>Place all assets in an <code>assets/</code> folder at the repo root. Update the README HTML comment placeholder I left near the top of <code>README.md</code> with the actual <code>&lt;img&gt;</code> tag.</p>
+
+<h2>6. Other polish recommendations for GitHub</h2>
+
+<h3>Repo settings (top of GitHub To-Do list)</h3>
+
+<ul>
+  <li><strong>Description</strong> (160 chars): "A vendor-neutral reference framework for building a hybrid digital lab around large language models. Companion deposit to Brownscombe et al."</li>
+  <li><strong>Website link</strong>: Zenodo DOI once minted; until then, the paper preprint URL when it exists.</li>
+  <li><strong>Topics/tags</strong>: <code>ai-for-science</code>, <code>scientific-computing</code>, <code>llm</code>, <code>claude</code>, <code>agent-skills</code>, <code>research-infrastructure</code>, <code>open-science</code>, <code>knowledge-base</code>, <code>scientific-writing</code>. These drive discoverability.</li>
+  <li><strong>Social preview</strong>: upload the 1280×640 card from the logo deliverables (see §5).</li>
+  <li><strong>License visibility</strong>: GitHub auto-detects from LICENSE files in root; both yours are non-standard names (<code>LICENSE-DOCS</code>, <code>LICENSE-CODE</code>). Consider adding a tiny <code>LICENSE</code> file that points to the two, or accept that the badges in the README carry the licence info.</li>
+</ul>
+
+<h3>Repo files to add later (v0.3)</h3>
+
+<ul>
+  <li><code>CONTRIBUTING.md</code> at root. Skeleton: how to fork, the four contribution types from the README, code-of-conduct pointer.</li>
+  <li><code>CODE_OF_CONDUCT.md</code>. Use the Contributor Covenant template; it is the de facto standard.</li>
+  <li><code>.github/ISSUE_TEMPLATE/</code>: bug report, feature request, adopter case study templates.</li>
+  <li><code>.github/PULL_REQUEST_TEMPLATE.md</code>.</li>
+  <li><code>.github/FUNDING.yml</code> if you want a sponsor button.</li>
+  <li><code>CHANGELOG.md</code>. Track changes between v0.2, v0.3, etc.</li>
+</ul>
+
+<h3>README enhancements</h3>
+
+<ul>
+  <li><strong>Animated GIF or short Loom video</strong> showing the setup interview in use. ~30 seconds. Place near the "The setup interview" section. Adopters who can see the form in action are much more likely to fork.</li>
+  <li><strong>"Open with Claude Code" button</strong>: a static badge linking to instructions for loading the framework into Claude Code. Optional analogue for other harnesses.</li>
+  <li><strong>Table of contents</strong> at the top, generated automatically by GitHub when you click the README hamburger icon; works out of the box.</li>
+</ul>
+
+<h3>Documentation polish (v0.3 or v0.4)</h3>
+
+<ul>
+  <li><strong>A real example deposit</strong>: a fully populated fork showing the example genomics lab's filled-in conventions, populated agents, three KB topics. Linked from the README as "see what a populated lab looks like". This is the single highest-impact addition for adopter conversion.</li>
+  <li><strong>Cross-harness ports</strong>: skeletal adapters for GPT (via the Responses API) and Gemini. Each port lives in <code>tools/ports/&lt;harness&gt;/</code>. Even a one-page README per port helps signal vendor-neutrality.</li>
+  <li><strong>An "anti-FAQ"</strong>: short page in the README answering "What this is NOT": not a packaged AI system, not vendor-specific, not a substitute for scientific judgment, not autonomous, not magic. You already have these lines in the README; promoting them to a dedicated section reduces misframed expectations.</li>
+</ul>
+
+<h2>7. Known follow-on work before v0.2 publication</h2>
+
+<table>
+<thead><tr><th>Item</th><th>Effort</th></tr></thead>
+<tbody>
+  <tr><td>Logo design + assets (commission or DIY)</td><td>1-3 weeks elapsed; you can publish v0.2 without and add in v0.2.1</td></tr>
+  <tr><td>Decide on the six flagged items in §4 above</td><td>30 min</td></tr>
+  <tr><td>Rename <code>Claude_files/</code> convention (if you accept the recommendation)</td><td>15 min, single grep-replace</td></tr>
+  <tr><td>Resolve tracked-changes Python scripts (ship, drop, or document)</td><td>15 min decision, 1 hr work if you ship</td></tr>
+  <tr><td>Final read-through of README.md</td><td>30 min</td></tr>
+  <tr><td>Test setup/lab-onboarding.html in a browser (form behaviour, export)</td><td>20 min</td></tr>
+  <tr><td>git init, initial commit, push to GitHub at <code>science-lab-AI-framework</code></td><td>15 min</td></tr>
+  <tr><td>Mint Zenodo DOI from the first tag</td><td>15 min</td></tr>
+  <tr><td>Update manuscript Box 1 and references with the DOI</td><td>30 min</td></tr>
+</tbody>
+</table>
+
+<h2>8. What I would do next, in order</h2>
+
+<ol>
+  <li>Open <code>tools/system-dashboard.html</code> from a local HTTP server (<code>cd science-lab-AI-framework; python3 -m http.server</code>, then visit the dashboard URL) and check the six panels render cleanly.</li>
+  <li>Open <code>setup/lab-onboarding.html</code> in a browser. Fill out a few fields to confirm the localStorage persistence and export work.</li>
+  <li>Walk through <code>README.md</code> in a Markdown renderer (GitHub's own preview, or VS Code's). Catch anything that does not read.</li>
+  <li>Decide the six flagged items in §4.</li>
+  <li>Commission the logo and the social preview card.</li>
+  <li>git init, commit, push, tag v0.2, mint Zenodo.</li>
+  <li>Wire the DOI into the manuscript and into the citation block in README.md.</li>
+</ol>
+
+<hr>
+
+<p class="small">All files in the deposit are under one of the two licences declared at root. The build process and this report are also CC BY 4.0. Forks and adaptations welcome.</p>
+
+</body>
+</html>

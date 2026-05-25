@@ -1,0 +1,13 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Documents in this repository (all Markdown files under conventions/, agents/,
+code_workflows/, manuscript_workflows/, review_workflows/, report_workflows/,
+knowledge_base/, and core/, plus README.md, CLAUDE.md, and DEPOSIT-PLAN.md)
+are licensed under the Creative Commons Attribution 4.0 International
+licence. To view a copy of this licence, visit:
+
+  https://creativecommons.org/licenses/by/4.0/
+
+Attribution requirements: cite Brownscombe et al. (in preparation),
+"Large language models as science tools: A hybrid digital lab for working
+scientists", along with the Zenodo DOI of the deposit you are using.
