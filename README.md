@@ -6,6 +6,7 @@
 
 <p align="center">
   <em>A reference framework for building a hybrid digital lab around large language models.</em><br>
+  <strong>Forked, not consumed.</strong><br>
   <span style="color:#6a6a66;">Repo: <code>science-lab-AI-framework</code></span>
 </p>
 
