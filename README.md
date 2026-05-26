@@ -104,7 +104,58 @@ Every file in the framework is designed to be edited. Use the AI-assisted onboar
 - Audit any `SKILL.md` and adjust domain-specific examples or steps.
 - Seed `knowledge_base/` with topic folders following the `_topic.template/` skeleton.
 
-The component READMEs inside each top-level folder walk you through what each file does and how to populate it. Track your changes through the dashboard (next section).
+The component READMEs inside each top-level folder walk you through what each file does and how to populate it.
+
+## Integrating with your AI tool
+
+The framework is a folder of markdown files. For your AI tool to use it, the tool needs to be able to read those files on demand and follow the routing in `CLAUDE.md`. The mechanics vary by harness; none of them require a build step or proprietary tooling.
+
+### Claude Code (canonical path)
+
+Claude Code is the framework's primary development target and the path the maintainers run daily. Two complementary steps wire it up:
+
+**1. Make the framework's instructions globally visible.** Claude Code reads `~/.claude/CLAUDE.md` at every session start. Symlink the framework's navigation file there:
+
+```bash
+# Back up any existing global CLAUDE.md first
+[ -f ~/.claude/CLAUDE.md ] && mv ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.bak
+
+# Symlink the framework's CLAUDE.md as your global instruction set
+ln -s /absolute/path/to/science-lab-AI-framework/CLAUDE.md ~/.claude/CLAUDE.md
+```
+
+After this, every Claude Code session automatically loads the framework's routing tables, voice conventions, and skill catalogue.
+
+**2. Make the framework files addressable.** The routing tables reference SKILL.md files inside the framework folder, which Claude Code can only read if the folder is in scope. Add an alias:
+
+```bash
+# In ~/.zshrc, ~/.bashrc, or your shell's profile
+alias claude='claude --add-dir /absolute/path/to/science-lab-AI-framework/'
+```
+
+Now when you run `claude` from any project directory, Claude Code can read every file in the framework. Skills load on demand based on the task; voice conventions load on any writing task; the iteration workflow loads when you refine an analysis. That is the entire wiring; the CLAUDE.md routing table does the rest at runtime.
+
+### Anthropic SDK and API
+
+For applications built on the Anthropic SDK, load the framework's markdown files programmatically and inject them as system-prompt content or file references. Pattern: detect the task intent, read the relevant SKILL.md, prepend it to the system prompt, run. A reference implementation is on the v0.3 roadmap.
+
+### Other harnesses (GPT, Gemini, open-weight models)
+
+Any AI tool that can:
+
+- Read markdown files on demand (file-system access, RAG, MCP, or attached file references),
+- Invoke sub-processes for sub-agent role-play within a session, and
+- Load external context via system prompts, project files, or retrieval
+
+can run the framework. Concrete pattern: load `CLAUDE.md` as the session's high-level instructions; load relevant SKILL.md files when their trigger description matches the task; reference sub-agent role files when dispatching specialist work. Cross-harness adapters (ChatGPT custom-GPT projects, Gemini extensions, LangChain or LlamaIndex wrappers) are a v0.4 roadmap item; community contributions welcome.
+
+### What the framework does not require
+
+- No proprietary file formats. Everything is markdown.
+- No vendor SDK lock-in. No build step, no compile target, no install pipeline.
+- No paid hosting. The framework runs locally; the LLM call is the only external dependency.
+
+Track your changes through the dashboard (next section).
 
 ## Tracking the framework as it grows
 
@@ -223,16 +274,6 @@ The terms used in this framework follow the paper:
 | **Convention** | A rule file (voice, research integrity, format) loaded by skills as a reference. |
 
 Skills follow the open Agent Skills standard. Knowledge bases use plain Markdown for portability; retrieval can be wired through any framework that supports RAG or the Model Context Protocol.
-
-## Compatibility
-
-The framework targets any LLM harness capable of:
-
-- Reading markdown files on demand.
-- Invoking sub-processes (sub-agents) within a session.
-- Loading external context (RAG / MCP / file-system access).
-
-It has been developed against Anthropic's Claude (Claude Code and the Anthropic API). It does not depend on Claude-specific features; ports to GPT, Gemini, and self-hosted models are explicit goals and contributions are welcome.
 
 ## Roadmap
 
