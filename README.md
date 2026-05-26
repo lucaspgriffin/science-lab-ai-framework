@@ -108,7 +108,24 @@ The component READMEs inside each top-level folder walk you through what each fi
 
 ## Integrating with your AI tool
 
-The framework is a folder of markdown files. For your AI tool to use it, the tool needs to be able to read those files on demand and follow the routing in `CLAUDE.md`. The mechanics vary by harness; none of them require a build step or proprietary tooling.
+The framework is a folder of markdown files. To use it, your AI tool needs to be able to read those files on demand and follow the routing they describe.
+
+### The role of `CLAUDE.md`
+
+`CLAUDE.md` at the repo root is the framework's **master instruction file**. It tells any AI instance which skills exist, which conventions to load before which kinds of task, which agents are available, and how to route a request to the right files. Everything downstream is referenced from there.
+
+The filename follows the convention established by Anthropic's Claude Code, which auto-loads `CLAUDE.md` at every session start. The *content* of the file is vendor-neutral: any LLM that can read markdown can use it. If you are running the framework on a non-Claude harness, you load the same file under whatever mechanism your harness provides (system prompt, project knowledge, attached file, RAG index). The filename is just convention; the routing logic is general.
+
+A future release may ship a parallel `AGENTS.md` (the cross-vendor convention OpenAI and others have proposed) as a symlink or duplicate, so adopters using non-Claude harnesses get an equivalent auto-load. For now, `CLAUDE.md` is the single source of truth and other harnesses load it explicitly.
+
+### Common pattern
+
+Whatever the harness, the integration boils down to two requirements:
+
+1. The AI tool must load `CLAUDE.md` once at session start (or keep it in context throughout).
+2. The AI tool must be able to open the skill, agent, convention, and knowledge-base files that `CLAUDE.md` references, on demand, when their triggers match the task.
+
+Concrete steps vary by harness. None require a build step or proprietary tooling.
 
 ### Claude Code (canonical path)
 
@@ -186,7 +203,7 @@ The dashboard is intentionally dependency-free static HTML. No server, no build 
 ```
 science-lab-AI-framework/
 ├── README.md                this file
-├── CLAUDE.md                instructions for any AI instance loading the framework
+├── CLAUDE.md                master instruction file: routing tables, always-load contracts, operating principles
 ├── LICENSE-DOCS             CC BY 4.0 for documentation
 ├── LICENSE-CODE             MIT for tooling code
 │
