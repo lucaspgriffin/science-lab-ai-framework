@@ -23,7 +23,7 @@
  *   skills/workflows/<workflow-name>/SKILL.md
  *   agents/<agent>.md                  (also picks up _*.template.md)
  *   knowledge_base/<topic>/...         (template folders prefixed with _ are flagged)
- *   conventions/<name>.md              (opinionated, populated)
+ *   conventions/<name>.md              (suggested fundamental, ships populated)
  *   conventions/<name>.template.md     (scaffold; flagged as unpopulated when the
  *                                       sibling <name>.md is absent)
  *   setup/prompts/<*.md>               (optional onboarding prompts)

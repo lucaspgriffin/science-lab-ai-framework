@@ -103,13 +103,32 @@ Every file in the framework is designed to be edited. Use the AI-assisted onboar
 - Copy any `*.template.md` to its non-template name and fill in the slots by hand.
 - Audit any `SKILL.md` and adjust domain-specific examples or steps.
 - Seed `knowledge_base/` with topic folders following the `_topic.template/` skeleton.
-- Regenerate the dashboard at any point:
+
+The component READMEs inside each top-level folder walk you through what each file does and how to populate it. Track your changes through the dashboard (next section).
+
+## Tracking the framework as it grows
+
+The dashboard at `tools/system-dashboard.html` is the central place to keep track of your framework as it develops. As you populate conventions, add domain-specialist agents, seed knowledge-base topics, or modify skills, the dashboard reflects what is in place and what is still pending. **Keep it open as you build.** It is the most reliable view of how your fork is evolving, both for yourself and for collaborators who clone from your version.
+
+Regenerate it at any point:
 
 ```bash
-node tools/generate-state.js && open tools/system-dashboard.html
+node tools/generate-state.js
+open tools/system-dashboard.html
 ```
 
-The component READMEs inside each top-level folder walk you through what each file does and how to populate it.
+The generator scans every component (skills, agents, conventions, knowledge_base, setup, tools) and produces both `tools/system-state.json` and an updated dashboard with the JSON embedded inline. The dashboard works opened directly via `file://`; no local HTTP server required.
+
+Six panels cover:
+
+- **Overview**: total counts of skills, agents, knowledge-base topics, and an adopter checklist of what is set up.
+- **Skills**: every SKILL.md with its frontmatter description, path, and last-modified date.
+- **Agents**: the core roster plus any domain specialists you have added.
+- **Knowledge base**: topic folders with article counts; template folders flagged separately from real topics.
+- **Conventions**: each file flagged as suggested (ships populated), populated (you filled in a template), or template only (still empty).
+- **Setup**: onboarding prompts plus a recap of which conventions are populated.
+
+The dashboard is intentionally dependency-free static HTML. No server, no build pipeline, no external CDN. Run the generator, open the file, see the state.
 
 ## What is inside
 
