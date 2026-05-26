@@ -2,7 +2,7 @@
   <img src="logo2.png" alt="Science Lab AI Framework" width="280">
 </p>
 
-<h1 align="center">AI Science Lab Framework</h1>
+<h1 align="center">Science Lab AI Framework</h1>
 
 <p align="center">
   <em>A framework for leveraging large language models as reliable science tools.</em><br>
